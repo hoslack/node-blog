@@ -3,11 +3,12 @@ var fs = require('fs');
 var path = require('path');
 
 
+
 function handler(request, response) {
-	var endpoint = request.url;
+	var url = request.url;
 	var filePath = path.join(__dirname + '/..' + '/public/index.html');
 
-	 if(endpoint==='/'){
+	 if(url==='/'){
 			response.writeHead(200, {'ContentType':'text/html'});
 
 			fs.readFile(filePath,function(error, file) {
@@ -21,13 +22,38 @@ function handler(request, response) {
 
 				});
 	}
+	else{
+
+	var filePath = path.join(__dirname, '..', url);
+		var extension = url.split('.')[1];
+		var extensionType = {
+			'html':'text/html',
+			'css':'text/css',
+			'js':'application/javascript',
+			'ico':'image/x-icon'
+		};
+		extensionType = extensionType[extension];
+
+		fs.readFile(filePath,function(error,file){
+			if (error) {
+				response.writeHead(500, {'Content-Type':'text/html'});
+				response.end('<h1>404 NOT FOUND</h1>')
+			} else {
+				response.writeHead(200,{'Content-Type': extensionType});
+				response.end(file);
+				}
+			});
+		
+
+
+	}
 }
 
 
 var server = http.createServer(handler);
 
 
-server.listen(3000, function () {
+server.listen(4000, function () {
 	console.log("Server listening at port 3000, ready to accept requests");
 }
 	)
