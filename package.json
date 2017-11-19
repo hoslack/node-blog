@@ -1,0 +1,21 @@
+{
+  "name": "node-blog",
+  "version": "0.0.0",
+  "description": "Nodejs Blogpost",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hoslack/node-blog.git"
+  },
+  "keywords": [
+    "blog"
+  ],
+  "author": "hoslack",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/hoslack/node-blog/issues"
+  }
+}
