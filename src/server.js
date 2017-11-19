@@ -1,12 +1,26 @@
 var http = require('http');
+var fs = require('fs');
+var path = require('path');
 
-
-var message = "I am happy to be coding along";
 
 function handler(request, response) {
-	response.writeHead(200, {'ContentType':'text/html'});
-	response.write(message);
-	response.end();
+	var endpoint = request.url;
+	var filePath = path.join(__dirname + '/..' + '/public/index.html');
+
+	 if(endpoint==='/'){
+			response.writeHead(200, {'ContentType':'text/html'});
+
+			fs.readFile(filePath,function(error, file) {
+				if(error){
+					response.writeHead(500, {'ContentType':'text/html'});
+					response.end("There was a problem with the server");
+					console.log(filePath);
+				} else{
+					response.end(file);
+				}
+
+				});
+	}
 }
 
 
