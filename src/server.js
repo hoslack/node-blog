@@ -1,62 +1,90 @@
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
-
+var port = 3002;
 
 
 function handler(request, response) {
 	var url = request.url;
-	var filePath = path.join(__dirname + '/..' + '/public/index.html');
 
-	 if(url==='/'){
-			response.writeHead(200, {'ContentType':'text/html'});
 
-			fs.readFile(filePath,function(error, file) {
-				if(error){
-					response.writeHead(500, {'ContentType':'text/html'});
-					response.end("There was a problem with the server");
-					console.log(filePath);
-				} else{
+
+			function home() {
+				response.writeHead(200, {'Content-Type':'text/html'});
+				fs.readFile(__dirname + '/..' + '/public/index.html',function(error, file) {
+					if(error){
+						response.writeHead(500, {'Content-Type':'text/html'});
+						response.write('There was an error on our side');
+						return;
+					}
+
 					response.end(file);
-				}
 
 				});
-	}
-	else{
-
-	var filePath = path.join(__dirname, '..', url);
-		var extension = url.split('.')[1];
-		var extensionType = {
-			'html':'text/html',
-			'css':'text/css',
-			'js':'application/javascript',
-			'ico':'image/x-icon'
-		};
-		extensionType = extensionType[extension];
-
-		fs.readFile(filePath,function(error,file){
-			if (error) {
-				response.writeHead(500, {'Content-Type':'text/html'});
-				response.end('<h1>404 NOT FOUND</h1>')
-			} else {
-				response.writeHead(200,{'Content-Type': extensionType});
-				response.end(file);
-				}
-			});
-		
+			}
 
 
-	}
+
+			function publicurls() {
+				var filePath = path.join(__dirname, '/..', '/public', url);
+				var extension = url.split('.')[1];
+				var extensionType = {
+					'html':'text/html',
+					'css':'text/css',
+					'js':'application/javascript',
+					'ico':'image/x-icon'
+				};
+				currentextensionType = extensionType[extension];
+
+				fs.readFile(filePath,function(error, file) {
+
+					if(error){
+						response.writeHead(500, {'Content-Type':'text/html'});
+						response.write('There was an error on our side');
+						return;
+					}
+					response.writeHead(200, {'Content-Type':'text/html'});
+					response.end(file);
+
+				});
+			}
+
+
+
+
+			if(url.indexOf('/public/'!==-1)){
+				publicurls();
+				home();
+				
+					}
+			else{
+				console.log('check url');
+			}
+
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 var server = http.createServer(handler);
 
-
-server.listen(4000, function () {
-	console.log("Server listening at port 3000, ready to accept requests");
-}
-	)
-
-
-
+server.listen(port, function() {
+	console.log('server running on port ' + port);
+});

@@ -4,7 +4,8 @@
   "description": "Nodejs Blogpost",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devStart": "nodemon src/server.js"
   },
   "repository": {
     "type": "git",
@@ -17,5 +18,8 @@
   "license": "BSD",
   "bugs": {
     "url": "https://github.com/hoslack/node-blog/issues"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
   }
 }
