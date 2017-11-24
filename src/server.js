@@ -1,7 +1,7 @@
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
-var port = 3002;
+var port = 3000;
 
 
 function handler(request, response) {
