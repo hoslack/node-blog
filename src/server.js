@@ -52,7 +52,7 @@ function handler(request, response) {
 			}
 
 			function sendpost() {
-				if (url.indexOf('/post')!==-1){
+				if (url==='/post'){
 					var allTheData = '';
 					
 					request.on('data', function(chunk) {
@@ -86,13 +86,7 @@ function handler(request, response) {
 
 			}
 
-
-
-
 			}
-
-
-
 
 			if(url.indexOf('/public/'!==-1)){
 				publicurls();
