@@ -1,8 +1,10 @@
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
-var port = 3002;
+var port = 3000;
 var querystring = require('querystring');
+
+var parsedData
 
 function handler(request, response) {
 	var url = request.url;
@@ -50,22 +52,41 @@ function handler(request, response) {
 			}
 
 			function sendpost() {
-				var allTheData = '';
-				request.on('data', function(chunk) {
-					allTheData += chunk;
-				});
+				if (url.indexOf('/post')!==-1){
+					var allTheData = '';
+					
+					request.on('data', function(chunk) {
+						allTheData += chunk;
+					});
 
-				var postObj = {};
+					
 
-				request.on('end', function() {
-				var parsedData = querystring.parse(allTheData);
-				postObj[Date.now()] = parsedData.post;
-				console.log(parsedData);
-				console.log(postObj);
+					request.on('end', function() {
+					parsedData = querystring.parse(allTheData);
+					
 
-				});
+					});
 
-				
+					fs.readFile(__dirname + '/.' + '/posts.json', function (error, file) {
+						if(error){
+							response.writeHead(500, {'Content-Type':'text/html'});
+							response.end('Json file could not be read');
+						}
+
+						var jsonData = JSON.parse(file);
+						var timestmp = Date.now();
+						jsonData[timestmp] = parsedData.post;
+						jsonData = JSON.stringify(jsonData);
+						console.log(jsonData);
+						fs.writeFile(__dirname + '/.' + '/posts.json', jsonData, function(error) {
+							if(error){console.log('cannot write file')};
+						})
+
+					});
+
+			}
+
+
 
 
 			}
@@ -77,6 +98,7 @@ function handler(request, response) {
 				publicurls();
 				home();
 				sendpost();
+				
 				
 					}
 			else{
